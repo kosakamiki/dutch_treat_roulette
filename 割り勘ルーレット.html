@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>割り勘ルーレット</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #fdfdfd;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+
+    input, button, textarea {
+      font-size: 1.2rem;
+      padding: 10px;
+      margin: 10px 0;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+
+    .digit-box {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .result {
+      font-size: 1.4rem;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💸 割り勘ルーレット 🎉</h1>
+  
+  <input type="number" id="amount" placeholder="金額を入力 (例: 1234)">
+  <textarea id="names" placeholder="参加者の名前を読点（、）区切りで入力 (例: 太郎、花子、次郎)"></textarea>
+  <button onclick="startRoulette()">ルーレット開始！</button>
+  
+  <div id="output"></div>
+
+  <script>
+    function startRoulette() {
+      const amount = document.getElementById("amount").value.trim();
+      const namesInput = document.getElementById("names").value.trim();
+      const output = document.getElementById("output");
+
+      if (!amount || !namesInput) {
+        alert("金額と名前を入力してください！");
+        return;
+      }
+
+      const names = namesInput.split("、").map(n => n.trim()).filter(n => n);
+      if (names.length === 0) {
+        alert("名前を入力してください！");
+        return;
+      }
+
+      output.innerHTML = "";
+
+      [...amount].forEach((digit, i) => {
+        if (isNaN(digit)) return;
+
+        const box = document.createElement("div");
+        box.className = "digit-box";
+        box.innerHTML = `<p>${i+1}桁目「${digit}」円の担当は... 🎲</p>`;
+
+        output.appendChild(box);
+
+        // ルーレット風アニメーション
+        let count = 0;
+        const interval = setInterval(() => {
+          const randomName = names[Math.floor(Math.random() * names.length)];
+          box.querySelector("p").innerHTML = `${i+1}桁目「${digit}」円の担当は... 🎲 <b>${randomName}</b>`;
+          count++;
+          if (count > 20) { // 少し回して止める
+            clearInterval(interval);
+            box.querySelector("p").innerHTML = `${i+1}桁目「${digit}」円の担当は 👉 <span class="result">${names[Math.floor(Math.random() * names.length)]}</span>`;
+          }
+        }, 100);
+      });
+    }
+  </script>
+
+</body>
+</html>
