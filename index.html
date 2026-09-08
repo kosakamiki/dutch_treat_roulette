@@ -56,8 +56,10 @@
 
   <h1>💸 割り勘ルーレット 🎉</h1>
   
-  <input type="number" id="amount" placeholder="金額を入力 (例: 1234)">
-  <textarea id="names" placeholder="参加者の名前を読点（、）区切りで入力 (例: 太郎、花子、次郎)"></textarea>
+  <input type="number" id="amount" placeholder="金額入力 " min="1">
+  <nav>数字で金額を入力(例: 1234)</nav>
+  <textarea id="names" placeholder="参加者氏名入力"></textarea>
+  <nav>参加者の名前を読点（、）区切りで入力 (例: 太郎、花子、次郎)</nav>
   <button onclick="startRoulette()">ルーレット開始！</button>
   
   <div id="output"></div>
@@ -68,9 +70,13 @@
       const namesInput = document.getElementById("names").value.trim();
       const output = document.getElementById("output");
 
-      if (!amount || !namesInput) {
+      if (!amount && !namesInput) {
         alert("金額と名前を入力してください！");
         return;
+      } else if(!amount) {
+        alert("金額を入力してください！");
+      } else if(!namesInput){
+        alert("名前を入力してください！");
       }
 
       const names = namesInput.split("、").map(n => n.trim()).filter(n => n);
